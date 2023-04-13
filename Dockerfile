@@ -14,4 +14,4 @@ RUN pip install opencv-python==4.7.0.72
 RUN pip install face_recognition==1.3.0
 
 # Run app.py when the container launches
-CMD ["python", "./app/runserver.py"]
+CMD ["python", "runserver.py"]
