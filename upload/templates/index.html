@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Face Upload</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <h1>Faces Upload</h1>
+        <div class="col-md-6">
+            <div>
+                <label class="btn btn-primary">
+                    Please select source face<input id="source-face-picker" type="file" name="file" accept="image/*"
+                                                    multiple
+                                                    style="width: 0px;height: 0px;overflow: hidden;">
+                </label>
+                <p></p>
+                <div class="imagePreview source-face-imagePreview"
+                     style="background-repeat: no-repeat;background-size: contain;"></div>
+                <p></p>
+                <!--                <input type="submit" value="Upload!" id="upload-button" class="btn btn-info">-->
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div>
+                <label class="btn btn-primary">
+                    Please select target face<input id="target-face-picker" type="file" name="file" accept="image/*"
+                                                    multiple
+                                                    style="width: 0px;height: 0px;overflow: hidden;">
+                </label>
+                <p></p>
+                <div class="imagePreview target-face-imagePreview"
+                     style="background-repeat: no-repeat;background-size: contain;"></div>
+                <p></p>
+            </div>
+            <!--            <h2 id="result">aAA</h2>-->
+        </div>
+    </div>
+    <input type="submit" value="Upload!" id="upload-button" class="btn btn-info">
+
+</div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/upload.js') }}"></script>
+
+</body>
+</html>
