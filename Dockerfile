@@ -6,6 +6,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+RUN pip install -U pip wheel cmake
 RUN pip install flask==2.2.3
 RUN pip install numpy==1.24.2
 RUN pip install pillow==9.5.0
