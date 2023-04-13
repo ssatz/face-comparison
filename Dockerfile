@@ -4,7 +4,7 @@ FROM python:3.8
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY ./app
+COPY . /app
 
 RUN pip install flask==2.2.3
 RUN pip install numpy==1.24.2
