@@ -156,8 +156,8 @@ class FaceSimilarity():
         if len(indexes) >= 1:
             self.get_face_unmatch_ratio(indexes)
 
-        # x, y, w, h = self.tgt_face_ary[order[0]]
-        # img = self.target_im[y:y + h, x:x + w]
+        x, y, w, h = self.tgt_face_ary[order[0]]
+        img = self.target_im[y:y + h, x:x + w]
         # Display the face image that we found to be the best match!
-        # pil_image = Image.fromarray(img)
-        # pil_image.show()
+        pil_image = Image.fromarray(img)
+        pil_image.show()

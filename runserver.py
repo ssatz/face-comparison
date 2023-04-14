@@ -11,12 +11,18 @@ parser.add_argument(
     help="Port to listen on",
     default=5050,
 )
+parser.add_argument(
+    "--host",
+    type=str,
+    help="host",
+    default='0.0.0.0',
+)
 args = parser.parse_args()
 
 if __name__ == '__main__':
     flask_options = dict(
-        host='localhost',
-        debug=True,
+        host=args.host,
+        debug=False,
         port=args.port,
         threaded=True,
     )

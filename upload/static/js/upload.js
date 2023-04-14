@@ -47,6 +47,7 @@ $(function() {
 });
 
 $("#upload-button").on("click", function(e) {
+
     if (['SourceImage']['Bytes'] === "") {
         alert("Please select source face.");
         return;
@@ -57,6 +58,9 @@ $("#upload-button").on("click", function(e) {
         return;
     }
 
+    console.log('================Request Data===============')
+    console.log(FaceData)
+
     var UPLOAD_URL = "/api/upload";
 
     $.ajax({
@@ -65,6 +69,7 @@ $("#upload-button").on("click", function(e) {
         data: FaceData,
         success: function(data) {
             data = JSON.parse(data);
+            console.log('================Response Data===============')
             console.log(data);
         }
       });

@@ -1,17 +1,20 @@
-FROM python:3.8
-
+FROM python:3.8.8
 # Set the working directory to /app
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-RUN pip install -U pip wheel cmake
-RUN pip install flask==2.2.3
-RUN pip install numpy==1.24.2
-RUN pip install pillow==9.5.0
-RUN pip install opencv-python==4.7.0.72
-RUN pip install face_recognition==1.3.0
+# Install any needed packages specified in requirements.txt
+RUN apt-get update && apt-get install -y cmake \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    python3-dev \
+    libgl1-mesa-glx \
+ && rm -rf /var/lib/apt/lists/* \
+ && pip install --no-cache-dir -r requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Run app.py when the container launches
 CMD ["python", "runserver.py"]
