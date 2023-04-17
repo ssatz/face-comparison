@@ -1,5 +1,6 @@
 import io
 import base64
+import time
 import numpy as np
 from PIL import Image
 import cv2
@@ -80,15 +81,15 @@ class FaceSimilarity():
 
     def face_detect(self):
 
-        if self.source_im.ndim == 3:
-            gray_src = cv2.cvtColor(self.source_im, cv2.COLOR_BGR2GRAY)
-        else:
-            gray_src = self.source_im
+        if self.source_im.ndim == 2:
+            self.source_im = cv2.cvtColor(self.source_im, cv2.COLOR_GRAY2RGB)
 
-        if self.target_im.ndim == 3:
-            gray_tgt = cv2.cvtColor(self.target_im, cv2.COLOR_BGR2GRAY)
-        else:
-            gray_tgt = self.target_im
+        gray_src = cv2.cvtColor(self.source_im, cv2.COLOR_BGR2GRAY)
+
+        if self.target_im.ndim == 2:
+            self.target_im = cv2.cvtColor(self.target_im, cv2.COLOR_GRAY2RGB)
+
+        gray_tgt = cv2.cvtColor(self.target_im, cv2.COLOR_BGR2GRAY)
 
         face_cascade = cv2.CascadeClassifier('cascades/data/haarcascade_frontalface_alt2.xml')
         self.src_face_ary = face_cascade.detectMultiScale(gray_src, scaleFactor=1.3, minNeighbors=3)
@@ -139,7 +140,10 @@ class FaceSimilarity():
             img = self.target_im[y:y + h, x:x + w]
 
             # Get the location of faces and face encodings for the current image
+            time.sleep(0.010)
             face_encodings = face_recognition.face_encodings(img)
+            if not face_encodings:
+                break
 
             # Get the face distance between the known person and all the faces in this image
             face_distance = face_recognition.face_distance(face_encodings, source_image_encoding)[0]
@@ -156,8 +160,8 @@ class FaceSimilarity():
         if len(indexes) >= 1:
             self.get_face_unmatch_ratio(indexes)
 
-        x, y, w, h = self.tgt_face_ary[order[0]]
-        img = self.target_im[y:y + h, x:x + w]
-        # Display the face image that we found to be the best match!
-        pil_image = Image.fromarray(img)
-        pil_image.show()
+        # x, y, w, h = self.tgt_face_ary[order[0]]
+        # img = self.target_im[y:y + h, x:x + w]
+        # # Display the face image that we found to be the best match!
+        # pil_image = Image.fromarray(img)
+        # pil_image.show()
