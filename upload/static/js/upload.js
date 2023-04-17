@@ -48,15 +48,17 @@ $(function() {
 
 $("#upload-button").on("click", function(e) {
 
-    if (['SourceImage']['Bytes'] === "") {
+    if (FaceData['SourceImage']['Bytes'] == "") {
         alert("Please select source face.");
         return;
     }
 
-    if (FaceData['TargetImage']['Bytes'] === "") {
+    if (FaceData['TargetImage']['Bytes'] == "") {
         alert("Please select target face.");
         return;
     }
+
+    $('#request-data').html(JSON.stringify(FaceData))
 
     console.log('================Request Data===============')
     console.log(FaceData)
@@ -68,6 +70,7 @@ $("#upload-button").on("click", function(e) {
         method: "POST",
         data: FaceData,
         success: function(data) {
+            $('#response-data').html(data)
             data = JSON.parse(data);
             console.log('================Response Data===============')
             console.log(data);
