@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Flask Face Upload</title>
+    <link rel="icon" type="image/ico" href="{{ url_for('static', filename='favicon.ico') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 </head>
@@ -41,6 +42,13 @@
         </div>
     </div>
     <input type="submit" value="Upload!" id="upload-button" class="btn btn-info">
+
+    <div class="row">
+        <h2>Request Data</h2>
+        <div id="request-data"></div>
+        <h2>Response Data</h2>
+        <div id="response-data"></div>
+    </div>
 
 </div>
 
