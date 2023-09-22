@@ -12,54 +12,34 @@ This app runs at port 5050.
     face_recognition==1.3.0
 
 # Request Data Format
-Request method : Post, Request URL : http://localhost/api/upload
-	
+### Request method : Post, Request API : /api/upload
+
+Example API : http://10.10.10.10:5050/api/upload	
 
     {
         'SourceImage': {'Bytes' :  base64string},
         'TargetImage': {'Bytes' :  base64string},
         'SimilarityThreshold' :  number
     } 
+### Request method : Post, Request API : /api/upload/images
+Example API : http://10.10.10.10:5050/api/upload/images	
 
-# Response Data Format
     {
-        "FaceMatches": [
-            {
-                "Face": {
-                    "BoundingBox": {
-                        "Height": number,
-                        "Left": number,
-                        "Top": number,
-                        "Width": number,
-                    }
-                },
-                "Similarity": number
-            }
-    
-        ],
-        "SourceImageFace": {
-            "BoundingBox": {
-                "Height": number,
-                "Left": number,
-                "Top": number,
-                "Width": number,
-            }
-        },
-        "UnmatchedFaces": [
-            {
-                "Face": {
-                    "BoundingBox": {
-                        "Height": number,
-                        "Left": number,
-                        "Top": number,
-                        "Width": number,
-                    }
-                },
-                "Similarity": number
-            }, 
-        ]
-    }
+        'source_image': original_source_image_formdata,
+        'target_image': original_target_image_formdata,
+        'SimilarityThreshold' :  number
+    } 
 
+# Response Data Format(JSON)
+
+    '{"Similarity": number}'
+
+# Test page
+We can easily test through web page. 
+
+The URL of web page : /api/page
+
+Example URL : http://10.10.10.10:5050/api/page
 
 # Execute 
 python runserver.py
