@@ -9,11 +9,16 @@ import face_recognition
 
 class FaceSimilarity():
 
-    def __init__(self, base64_source_img, base64_target_img, similarity_threshold):
+    def __init__(self, source_img, target_img, similarity_threshold, is_base64=True):
         super().__init__()
-        # convert base64 image data to image array(Please use for jpeg image)
-        self.source_im = self.base64_to_RGB(base64_source_img)
-        self.target_im = self.base64_to_RGB(base64_target_img)
+
+        if is_base64 == True:
+            # convert base64 image data to image array(Please use for jpeg image)
+            self.source_im = self.base64_to_RGB(source_img)
+            self.target_im = self.base64_to_RGB(target_img)
+        else:
+            self.source_im = np.array(Image.open(source_img))
+            self.target_im = np.array(Image.open(target_img))
 
         self.similarity_threshold = float(similarity_threshold)
         self.similarity_ary = []
@@ -50,17 +55,27 @@ class FaceSimilarity():
         self.init()
 
     def init(self):
-        self.face_detect()
+        # self.face_detect()
+        #
+        # if len(self.src_face_ary) == 0:
+        #     return
+        #
+        # self.get_src_ratio()
+        #
+        # if len(self.tgt_face_ary) == 0:
+        #     return
+        #
+        # self.get_similarity()
+        if self.source_im.ndim == 2:
+            self.source_im = cv2.cvtColor(self.source_im, cv2.COLOR_GRAY2RGB)
 
-        if len(self.src_face_ary) == 0:
-            return
+        if self.target_im.ndim == 2:
+            self.target_im = cv2.cvtColor(self.target_im, cv2.COLOR_GRAY2RGB)
 
-        self.get_src_ratio()
-
-        if len(self.tgt_face_ary) == 0:
-            return
-
-        self.get_similarity()
+        source_image_encoding = face_recognition.face_encodings(self.source_im)[0]
+        face_encodings = face_recognition.face_encodings(self.target_im)
+        face_distance = face_recognition.face_distance(face_encodings, source_image_encoding)[0]
+        self.response_data = {'Similarity': round((1 - face_distance) * 100, 2)}
 
     def get_src_ratio(self):
         src_ratio = self.src_face_ary.astype(float)
@@ -91,9 +106,9 @@ class FaceSimilarity():
 
         gray_tgt = cv2.cvtColor(self.target_im, cv2.COLOR_BGR2GRAY)
 
-        face_cascade = cv2.CascadeClassifier('cascades/data/haarcascade_frontalface_alt2.xml')
-        self.src_face_ary = face_cascade.detectMultiScale(gray_src, scaleFactor=1.3, minNeighbors=3)
-        self.tgt_face_ary = face_cascade.detectMultiScale(gray_tgt, scaleFactor=1.3, minNeighbors=3)
+        face_cascade = cv2.CascadeClassifier('cascades/data/haarcascade_frontalface_alt_tree.xml')
+        self.src_face_ary = face_cascade.detectMultiScale(gray_src, scaleFactor=1.5, minNeighbors=3)
+        self.tgt_face_ary = face_cascade.detectMultiScale(gray_tgt, scaleFactor=1.5, minNeighbors=3)
 
     def get_face_match_ratio(self):
         tgt_ratio = self.tgt_face_ary.astype(float)
