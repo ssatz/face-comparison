@@ -17,8 +17,8 @@ class FaceSimilarity():
             self.source_im = self.base64_to_RGB(source_img)
             self.target_im = self.base64_to_RGB(target_img)
         else:
-            self.source_im = np.array(Image.open(source_img))
-            self.target_im = np.array(Image.open(target_img))
+            self.source_im = source_img
+            self.target_im = target_img
 
         self.similarity_threshold = float(similarity_threshold)
         self.similarity_ary = []
@@ -66,15 +66,41 @@ class FaceSimilarity():
         #     return
         #
         # self.get_similarity()
-        if self.source_im.ndim == 2:
-            self.source_im = cv2.cvtColor(self.source_im, cv2.COLOR_GRAY2RGB)
+        # if self.source_im.ndim == 2:
+        #     self.source_im = cv2.cvtColor(self.source_im, cv2.COLOR_GRAY2RGB)
+        #
+        # if self.target_im.ndim == 2:
+        #     self.target_im = cv2.cvtColor(self.target_im, cv2.COLOR_GRAY2RGB)
 
-        if self.target_im.ndim == 2:
-            self.target_im = cv2.cvtColor(self.target_im, cv2.COLOR_GRAY2RGB)
+        source_im_arr = [np.array(Image.open(self.source_im)),
+                         np.array(Image.open(self.source_im).rotate(90, expand=True)),
+                         np.array(Image.open(self.source_im).rotate(180, expand=True)),
+                         np.array(Image.open(self.source_im).rotate(270, expand=True))]
+        target_im_arr = [np.array(Image.open(self.target_im)),
+                         np.array(Image.open(self.target_im).rotate(90, expand=True)),
+                         np.array(Image.open(self.target_im).rotate(180, expand=True)),
+                         np.array(Image.open(self.target_im).rotate(270, expand=True))]
 
-        source_image_encoding = face_recognition.face_encodings(self.source_im)[0]
-        face_encodings = face_recognition.face_encodings(self.target_im)
-        face_distance = face_recognition.face_distance(face_encodings, source_image_encoding)[0]
+        source_face_encoding = None
+        target_face_encoding = None
+        for i in range(len(source_im_arr)):
+            source_face_encoding = face_recognition.face_encodings(source_im_arr[i])
+            if len(source_face_encoding) != 0:
+                break
+
+        for i in range(len(target_im_arr)):
+            target_face_encoding = face_recognition.face_encodings(target_im_arr[i])
+            if len(target_face_encoding) != 0:
+                break
+
+        if source_face_encoding is None:
+            self.response_data = {'Warning': 'Incorrect source image'}
+            return
+        if target_face_encoding is None:
+            self.response_data = {'Warning': 'Incorrect target image'}
+            return
+
+        face_distance = face_recognition.face_distance(target_face_encoding, source_face_encoding[0])[0]
         self.response_data = {'Similarity': round((1 - face_distance) * 100, 2)}
 
     def get_src_ratio(self):
@@ -90,8 +116,9 @@ class FaceSimilarity():
 
     def base64_to_RGB(self, base64_string):
         imgdata = base64.b64decode(str(base64_string))
-        img = Image.open(io.BytesIO(imgdata))
-        img = np.array(img)
+        img = io.BytesIO(imgdata)
+        # img = Image.open(io.BytesIO(imgdata))
+        # img = np.array(img)
         return img
 
     def face_detect(self):
